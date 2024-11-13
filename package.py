@@ -11,18 +11,14 @@ class Package:
         self.weight = weight
         self.notes = notes
         self.status = "At the hub"
+        self.loaded_timestamp = None
+        self.delivered_timestamp = None
 
-    def getAssociatedPackages(self, hashTable):
-        # If this current package must be delivered with other packages
-        if "Must" in self.notes:
-            associated_packages = []
+    def readyForDelivery(self):
+        if "At the hub" in self.status: 
 
-            # Get the package ID
-            split_note = self.replace(",", " ").split()
-            associated_ids = [int(i) for i in split_note if i.isdigit()]
-
-            for package_id in associated_ids:
-                package = hashTable.getPackage(package_id)
-                associated_packages.append(package)
-                #make it recursive
-
+    def getId(self):
+        return self.id
+    
+    def getStatus(self):
+        return self.status
