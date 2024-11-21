@@ -14,11 +14,5 @@ class Package:
         self.loaded_timestamp = None
         self.delivered_timestamp = None
 
-    def readyForDelivery(self):
-        if "At the hub" in self.status: 
-
     def getId(self):
         return self.id
-    
-    def getStatus(self):
-        return self.status

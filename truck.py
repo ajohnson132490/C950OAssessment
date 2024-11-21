@@ -10,10 +10,8 @@ class Truck:
         self.current_time = timedelta(hours = 8, minutes = 0, seconds = 0)
 
     def loadPackages(self, hash, list):
-        package_list = []
         for id in list: 
-        for package in list:
-            if package.readyForDelivery():
-                package.loaded_timestamp = self.current_time
-                package.status = "En route"
-                self.load.append(package)
+            package = hash.get(id)
+            package.loaded_timestamp = self.current_time
+            package.status = "En route"
+            self.load.append(package)
