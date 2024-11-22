@@ -33,5 +33,5 @@ class Hash():
         
         for p in self.__table[index]:
             if p == id:
-                return id
+                return p
             
