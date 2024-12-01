@@ -10,7 +10,7 @@ class Truck:
     # Creating some data holders
     load = []
     address_list = []
-    distance_data = [[0 for x in range(26)] for y in range(26)]
+    distance_data = [[0 for x in range(27)] for y in range(27)]
 
     def __init__(self, id):
         self.id = id
@@ -38,18 +38,19 @@ class Truck:
             # Get every row in the csv file 
             row_index = 0
             for row in reader:
-                for j in range(26):
+                for j in range(27):
                     if row[j] != '':
+                        print("please: ", row[j])
                         # Put it in a table format
                         self.distance_data[row_index][j] = float(row[j])
                         self.distance_data[j][row_index] = float(row[j])
-            row_index += 1
+                row_index += 1
 
     def distanceBetween(self, address1, address2):
-        return self.distance_data[self.address_list.index(address1), self.address_list.index(address2)]
+        return self.distance_data[self.address_list.index(address1)][self.address_list.index(address2)]
 
     def loadPackages(self, hash, list):
-        ordered_list = self.buildRoute(list)
+        ordered_list = self.buildRoute(hash, list)
         for package in ordered_list: 
             package.loaded_timestamp = self.current_time
             package.status = "En route"
@@ -60,16 +61,22 @@ class Truck:
         nearest_pkg_dist = None
         ordered_list = []
         for p in list:
+            cur_pkg = hash.get(p)
+            #print("new package id: ", p)
             for package_id in list:
-                package = hash.get(package_id)
-                if nearest_pkg is None:
-                    nearest_pkg = package
-                    nearest_pkg_dist = self.distanceBetween(nearest_pkg.address, p.address)
-                else:
-                    new_pkg_dist = self.distanceBetween(package.address, p.address)
-
-                    if new_pkg_dist < nearest_pkg_dist:
+                if package_id != p:
+                    package = hash.get(package_id)
+                    #print("comparing to package id: ", package_id)
+                    if nearest_pkg is None:
                         nearest_pkg = package
-                        nearest_pkg_dist = new_pkg_dist
+                        nearest_pkg_dist = self.distanceBetween(nearest_pkg.address, cur_pkg.address)
+                    else:
+                        new_pkg_dist = self.distanceBetween(package.address, cur_pkg.address)
+
+                        if new_pkg_dist < nearest_pkg_dist:
+                            nearest_pkg = package
+                            nearest_pkg_dist = new_pkg_dist
+                    #print("cur nearest distance: ", nearest_pkg_dist)
+            #print("final nearest distance: ", nearest_pkg_dist)
             ordered_list.append(nearest_pkg)
         return ordered_list

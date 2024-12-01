@@ -3,8 +3,8 @@
 # Import all files
 import csv
 from Hash import Hash
-from Package import Package
-from Truck import Truck
+from package import Package
+from truck import Truck
 from datetime import datetime, timedelta
 
 def main():
@@ -33,6 +33,8 @@ def main():
     # Create the trucks
     truck1 = Truck(1)
     truck2 = Truck(2)
+    truck1.loadPackages(hash, truck1_first_load)
+    truck2.loadPackages(hash, truck2_first_load)
 
 if __name__ == "__main__":
     main()

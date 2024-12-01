@@ -32,6 +32,6 @@ class Hash():
         index = self.__hashFunction(id)
         
         for p in self.__table[index]:
-            if p == id:
+            if p.getId() == id:
                 return p
             
