@@ -3,8 +3,8 @@
 # Import all files
 import csv
 from Hash import Hash
-from package import Package
-from truck import Truck
+from Package import Package
+from Truck import Truck
 from datetime import datetime, timedelta
 
 def main():

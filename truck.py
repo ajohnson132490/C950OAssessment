@@ -34,17 +34,25 @@ class Truck:
         # Get all the distances in a 2d array
         with open('Resources/distances.csv') as distance_file:
             reader = csv.reader(distance_file, delimiter = ",")
-
             # Get every row in the csv file 
             row_index = 0
             for row in reader:
                 for j in range(27):
                     if row[j] != '':
-                        print("please: ", row[j])
                         # Put it in a table format
                         self.distance_data[row_index][j] = float(row[j])
-                        self.distance_data[j][row_index] = float(row[j])
+                        #print(float(row[j]))
+                        #self.distance_data[j][row_index] = float(row[j])
+                    else: 
+                        self.distance_data[row_index][j] = float(99.9)
                 row_index += 1
+
+            s = ""
+            for row in range(27):
+                for j in range(27):
+                    s += (str(self.distance_data[row][j]) + ", ")
+                #print(f"Row {row}: {s}")
+                s = ""
 
     def distanceBetween(self, address1, address2):
         return self.distance_data[self.address_list.index(address1)][self.address_list.index(address2)]
@@ -77,6 +85,6 @@ class Truck:
                             nearest_pkg = package
                             nearest_pkg_dist = new_pkg_dist
                     #print("cur nearest distance: ", nearest_pkg_dist)
-            #print("final nearest distance: ", nearest_pkg_dist)
             ordered_list.append(nearest_pkg)
+            print("final nearest distance: ", nearest_pkg_dist, " on package: ", package.getId())
         return ordered_list
