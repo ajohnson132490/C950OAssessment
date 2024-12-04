@@ -42,7 +42,7 @@ class Truck:
                         # Put it in a table format
                         self.distance_data[row_index][j] = float(row[j])
                         #print(float(row[j]))
-                        #self.distance_data[j][row_index] = float(row[j])
+                        self.distance_data[j][row_index] = float(row[j])
                     else: 
                         self.distance_data[row_index][j] = float(99.9)
                 row_index += 1
@@ -59,22 +59,23 @@ class Truck:
 
     def loadPackages(self, hash, list):
         ordered_list = self.buildRoute(hash, list)
-        for package in ordered_list: 
+        for package in ordered_list[:-1]: 
             package.loaded_timestamp = self.current_time
             package.status = "En route"
             self.load.append(package)
 
-    def buildRoute(self, hash, list):
+    def buildRoute(self, hash, lst):
+        # THiS FINDS THE NEXT NEAREST PACKAGE, BUT DOESN'T CHECK FOR THE NEAREST PACKAGE TO THE CURRENT LOCATION
         nearest_pkg = None
         nearest_pkg_dist = None
+        next_pkg = None
         ordered_list = []
-        for p in list:
+        adj_list = list(lst)
+        for p in lst:
             cur_pkg = hash.get(p)
-            #print("new package id: ", p)
-            for package_id in list:
+            for package_id in adj_list:
                 if package_id != p:
                     package = hash.get(package_id)
-                    #print("comparing to package id: ", package_id)
                     if nearest_pkg is None:
                         nearest_pkg = package
                         nearest_pkg_dist = self.distanceBetween(nearest_pkg.address, cur_pkg.address)
@@ -84,7 +85,17 @@ class Truck:
                         if new_pkg_dist < nearest_pkg_dist:
                             nearest_pkg = package
                             nearest_pkg_dist = new_pkg_dist
-                    #print("cur nearest distance: ", nearest_pkg_dist)
             ordered_list.append(nearest_pkg)
-            print("final nearest distance: ", nearest_pkg_dist, " on package: ", package.getId())
+            try:
+                adj_list.remove(nearest_pkg.getId())
+                #print("final nearest distance: ", nearest_pkg_dist, " between cur_pkg: ", cur_pkg.getId(), " and package: ", nearest_pkg.getId())
+            except:
+                #adj_list is empty
+                print("\n")
+            nearest_pkg = None
+        str = ""
+        for item in ordered_list[:-1]:
+            str += f"{item.getId()}"
+            str += " --> "
+        print(str)
         return ordered_list
