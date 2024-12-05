@@ -5,17 +5,17 @@ class Truck:
     # Creating constants for the truck
     CONST_SPEED = 18
     CONST_MAX_PACKAGES = 16
-    CONST_HUB_ADDRESS = "4001 South 700 East"
-
-    # Creating some data holders
-    load = []
-    address_list = []
-    distance_data = [[0 for x in range(27)] for y in range(27)]
+    CONST_HUB_ADDRESS = "4001 South 700 East"    
 
     def __init__(self, id):
         self.id = id
         self.current_time = timedelta(hours = 8, minutes = 0, seconds = 0)
         self.current_address = self.CONST_HUB_ADDRESS
+        self.load = []
+        self.delivery_timestamps = []
+        self.address_list = []
+        self.distance_data = [[0 for x in range(27)] for y in range(27)]
+        self.mileage = 0.0
 
         # Populate data needed for other functions
         self.populateAddressesAndDistances()
@@ -57,36 +57,36 @@ class Truck:
     def distanceBetween(self, address1, address2):
         return self.distance_data[self.address_list.index(address1)][self.address_list.index(address2)]
 
-    def loadPackages(self, hash, list):
-        ordered_list = self.buildRoute(hash, list)
-        for package in ordered_list[:-1]: 
+    def loadPackages(self, hash, lst):
+        ordered_list = self.buildRoute(hash, lst)
+        for package in ordered_list: 
             package.loaded_timestamp = self.current_time
             package.status = "En route"
-            self.load.append(package)
+            self.load.append(package.getId())
 
     def buildRoute(self, hash, lst):
-        # THiS FINDS THE NEXT NEAREST PACKAGE, BUT DOESN'T CHECK FOR THE NEAREST PACKAGE TO THE CURRENT LOCATION
         nearest_pkg = None
         nearest_pkg_dist = 99.9
         ordered_list = []
-        first_pkg = True
-        adj_list = list(lst)
+        self.adj_list = list(lst)
+        first_pkg = 0
+
+
+        for package_id in lst:
+            package = hash.get(package_id)
+            temp_dist = self.distanceBetween(package.address, self.current_address)
+            if temp_dist < nearest_pkg_dist:
+                nearest_pkg = package
+                nearest_pkg_dist = temp_dist
+                #print(f"new nearest pkg dist: {nearest_pkg_dist} on pkg {package.getId()}")
+        first_pkg = nearest_pkg.getId()
+        ordered_list.append(nearest_pkg)
+        nearest_pkg = None
+
         for p in lst:
             cur_pkg = hash.get(p)
-
-            if (first_pkg):
-                for package_id in adj_list:
-                    package = hash.get(package_id)
-                    temp_dist = self.distanceBetween(package.address, self.current_address)
-                    if temp_dist < nearest_pkg_dist:
-                        nearest_pkg = package
-                        nearest_pkg_dist = temp_dist
-                        #print(f"new nearest pkg dist: {nearest_pkg_dist} on pkg {package.getId()}")
-
-                first_pkg = False
-
-            for package_id in adj_list:
-                if package_id != p:
+            for package_id in self.adj_list:
+                if package_id != p and package_id != first_pkg:
                     package = hash.get(package_id)
                     if nearest_pkg is None:
                         nearest_pkg = package
@@ -99,17 +99,47 @@ class Truck:
                             nearest_pkg_dist = new_pkg_dist
             ordered_list.append(nearest_pkg)
             try:
-                adj_list.remove(nearest_pkg.getId())
+                self.adj_list.remove(nearest_pkg.getId())
                 #print("final nearest distance: ", nearest_pkg_dist, " between cur_pkg: ", cur_pkg.getId(), " and package: ", nearest_pkg.getId())
             except:
                 #adj_list is empty
-                nearest_pkg = None
+                del self.adj_list
+
             nearest_pkg = None
-        str = ""
+
         ordered_list.pop()
-        ordered_list.reverse()
-        for item in ordered_list:
-            str += f"{item.getId()}"
-            str += " --> "
-        print(str)
+        # This is for printing out the route for testing purposes.
+        # str = ""
+        # for item in ordered_list:
+        #     str += f"{item.getId()}"
+        #     str += " --> "
+        # print(str)
+
         return ordered_list
+    
+    def deliverPackages(self, hash):
+        print(self.load)
+        # Iterate through all package in the current load
+        for package_id in self.load:
+            package = hash.get(package_id)
+            str = ""
+            print(f"Current PKG: {package.getId()}")
+
+            # Update the mileage and time
+            temp_dist = self.distanceBetween(self.current_address, package.address)
+            self.mileage += temp_dist
+            self.current_time += timedelta(minutes=(temp_dist / self.CONST_SPEED * 60))
+            self.delivery_timestamps.append([self.mileage, self.current_time])
+
+            # Deliver the package
+            package.status = "Delivered"
+            package.delivered_timestamp = self.current_time
+        # Clear out the load list
+        print(f"\nTRUCK {self.id} DELIVERY ROUTE COMPLETE\n")
+        self.load.clear()
+        
+        # Return to the hub
+        dist_from_hub = self.distanceBetween(self.current_address, self.CONST_HUB_ADDRESS)
+        self.current_time += timedelta(minutes=(dist_from_hub / self.CONST_SPEED * 60))
+        self.delivery_timestamps.append([self.mileage, self.current_time])
+
