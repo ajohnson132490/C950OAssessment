@@ -67,12 +67,24 @@ class Truck:
     def buildRoute(self, hash, lst):
         # THiS FINDS THE NEXT NEAREST PACKAGE, BUT DOESN'T CHECK FOR THE NEAREST PACKAGE TO THE CURRENT LOCATION
         nearest_pkg = None
-        nearest_pkg_dist = None
-        next_pkg = None
+        nearest_pkg_dist = 99.9
         ordered_list = []
+        first_pkg = True
         adj_list = list(lst)
         for p in lst:
             cur_pkg = hash.get(p)
+
+            if (first_pkg):
+                for package_id in adj_list:
+                    package = hash.get(package_id)
+                    temp_dist = self.distanceBetween(package.address, self.current_address)
+                    if temp_dist < nearest_pkg_dist:
+                        nearest_pkg = package
+                        nearest_pkg_dist = temp_dist
+                        #print(f"new nearest pkg dist: {nearest_pkg_dist} on pkg {package.getId()}")
+
+                first_pkg = False
+
             for package_id in adj_list:
                 if package_id != p:
                     package = hash.get(package_id)
@@ -91,10 +103,12 @@ class Truck:
                 #print("final nearest distance: ", nearest_pkg_dist, " between cur_pkg: ", cur_pkg.getId(), " and package: ", nearest_pkg.getId())
             except:
                 #adj_list is empty
-                print("\n")
+                nearest_pkg = None
             nearest_pkg = None
         str = ""
-        for item in ordered_list[:-1]:
+        ordered_list.pop()
+        ordered_list.reverse()
+        for item in ordered_list:
             str += f"{item.getId()}"
             str += " --> "
         print(str)
