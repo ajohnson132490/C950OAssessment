@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta
-
 class Package:
     def __init__(self, id, address, city, state, zip, deadline, weight, notes):
         self.id = id
