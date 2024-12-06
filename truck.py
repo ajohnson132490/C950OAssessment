@@ -69,7 +69,7 @@ class Truck:
         nearest_pkg = None
         nearest_pkg_dist = 99.9
         ordered_list = []
-        self.adj_list = list(lst)
+        adj_list = list(lst)
         first_pkg = 0
 
         for package_id in lst:
@@ -83,7 +83,7 @@ class Truck:
             temp_address = nearest_pkg.address
         ordered_list.append(nearest_pkg)
         try:
-            self.adj_list.remove(int(first_pkg))
+            adj_list.remove(int(first_pkg))
         except:
             del first_pkg
         
@@ -91,22 +91,22 @@ class Truck:
 
         for p in lst:
             nearest_pkg_dist = 99.9
-            for package_id in self.adj_list:
-                if package_id != p:
+            try:
+                for package_id in adj_list:
                     new_package = hash.get(package_id)
                     new_pkg_dist = self.distanceBetween(new_package.address, temp_address)
 
                     if new_pkg_dist < nearest_pkg_dist:
                         nearest_pkg = new_package
                         nearest_pkg_dist = new_pkg_dist
-            try:
+                
                 ordered_list.append(nearest_pkg)
-                self.adj_list.remove(nearest_pkg.getId())
+                adj_list.remove(nearest_pkg.getId())
                 temp_address = nearest_pkg.address
                 #print("final nearest distance: ", nearest_pkg_dist, " between cur_pkg: ", p, " and package: ", nearest_pkg.getId())
             except:
                 #adj_list is empty
-                del self.adj_list
+                del nearest_pkg_dist
 
         ordered_list.pop()
         # This is for printing out the route for testing purposes.
