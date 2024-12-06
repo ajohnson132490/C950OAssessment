@@ -36,15 +36,11 @@ def main():
             
 
     # Creating out loads to maximize efficiency
-    truck1_first_load = [19, 14, 15, 16, 13, 20, 21, 35, 34, 40, 1, 27]
-    truck2_first_load = [31, 32, 37, 38]
-    truck1_second_load = []
-    truck2_second_load = [25, 26, 24, 22, 6]
-
-    
-    #19, 14, 15, 16, 13, 20, 21
-    #40, 37, 38, 34, 30, 29, 39, 35, 33, 24, 23, 22, 21, 17, 12, 20
-    
+    truck1_first_load = [14, 15, 16, 13, 20, 21, 35, 34, 40, 1, 27, 19]
+    truck2_first_load = [24, 22, 18, 36]
+    truck1_second_load = [29, 28, 39, 33, 23, 11, 12, 5, 7, 2, 4]
+    truck2_second_load = [25, 26, 31, 32, 37, 38, 8, 30, 3, 10, 17, 6]   
+    truck1_third_load = [9] 
 
     # Load and deliver the first route
     truck1.loadPackages(hash, truck1_first_load)
@@ -59,6 +55,10 @@ def main():
 
     truck1.deliverPackages(hash)
     truck2.deliverPackages(hash)
+
+    truck1.loadPackages(hash, truck1_third_load)
+
+    truck1.deliverPackages(hash)
 
     # Run the user interface
     userInterface()
@@ -122,9 +122,9 @@ def packageReport():
     time = timedelta(hours=time.hour, minutes=time.minute, seconds=time.second)
 
     # Printing status based on what timestamps are available
-    if (package.delivered_timestamp < time):
+    if (package.delivered_timestamp <= time):
         print(f"Delivered at {package.delivered_timestamp}")
-    elif (package.loaded_timestamp < time):
+    elif (package.loaded_timestamp <= time):
         print(f"Loaded at {package.loaded_timestamp}")
     else:
         print("At the hub")
