@@ -118,12 +118,12 @@ class Truck:
         return ordered_list
     
     def deliverPackages(self, hash):
-        print(self.load)
+        #print(self.load)
         # Iterate through all package in the current load
         for package_id in self.load:
             package = hash.get(package_id)
             str = ""
-            print(f"Current PKG: {package.getId()}")
+            #print(f"Current PKG: {package.getId()}")
 
             # Update the mileage and time
             temp_dist = self.distanceBetween(self.current_address, package.address)
@@ -135,7 +135,7 @@ class Truck:
             package.status = "Delivered"
             package.delivered_timestamp = self.current_time
         # Clear out the load list
-        print(f"\nTRUCK {self.id} DELIVERY ROUTE COMPLETE\n")
+        #print(f"\nTRUCK {self.id} DELIVERY ROUTE COMPLETE\n")
         self.load.clear()
         
         # Return to the hub
