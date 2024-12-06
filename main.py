@@ -36,10 +36,15 @@ def main():
             
 
     # Creating out loads to maximize efficiency
-    truck1_first_load = [40, 37, 34, 31, 30, 29, 39, 35, 33, 26, 24, 23, 22, 21, 17, 12]
-    truck2_first_load = [3, 18, 36, 38, 13, 15, 19, 16, 14, 20, 1, 2, 4, 5, 7, 8]
-    truck1_second_load = [6, 25, 11]
-    truck2_second_load = [9, 10, 28, 32]
+    truck1_first_load = [19, 14, 15, 16, 13, 20, 21, 35, 34, 40, 1, 27]
+    truck2_first_load = [31, 32, 37, 38]
+    truck1_second_load = []
+    truck2_second_load = [25, 26, 24, 22, 6]
+
+    
+    #19, 14, 15, 16, 13, 20, 21
+    #40, 37, 38, 34, 30, 29, 39, 35, 33, 24, 23, 22, 21, 17, 12, 20
+    
 
     # Load and deliver the first route
     truck1.loadPackages(hash, truck1_first_load)
@@ -55,12 +60,10 @@ def main():
     truck1.deliverPackages(hash)
     truck2.deliverPackages(hash)
 
-    #print(truck1.delivery_timestamps)
-    #print(str(truck1.delivery_timestamps[0][1]))
+    # Run the user interface
+    userInterface()
 
-    userInterface(hash)
-
-def userInterface(hash):
+def userInterface():
     # Welcome screen
     print("-----------------------------")
     print("      WGU Parcel Service     ")
@@ -81,10 +84,13 @@ def userInterface(hash):
         match option:
             case "1":
                 allPackagesReport()
+                returnToUserInterface()
             case "2":
                 packageReport()
+                returnToUserInterface()
             case "3":
                 mileageReport()
+                returnToUserInterface()
             case "4":
                 print("Exit")
                 quit()
@@ -96,7 +102,32 @@ def allPackagesReport():
     print("haha")
         
 def packageReport():
-    print("haha")
+    # Report welcome screen
+    print("-----------------------------")
+    print("  Individual Package Report  ")
+    print("-----------------------------")
+
+    # Getting the package info
+    try:
+        package_id = int(input("Please enter the package ID number: "))
+        time = datetime.strptime(input("Please enter the time in the following format: H:M AM/PM "), "%I:%M %p")
+        
+    except:
+        print("Invalid input")
+        packageReport()
+
+    package = hash.get(package_id)
+
+    # Reformatting the time to remove the date
+    time = timedelta(hours=time.hour, minutes=time.minute, seconds=time.second)
+
+    # Printing status based on what timestamps are available
+    if (package.delivered_timestamp < time):
+        print(f"Delivered at {package.delivered_timestamp}")
+    elif (package.loaded_timestamp < time):
+        print(f"Loaded at {package.loaded_timestamp}")
+    else:
+        print("At the hub")
 
 def mileageReport():
     # Report welcome screen
@@ -108,6 +139,14 @@ def mileageReport():
     print(f"Truck {truck1.id} mileage: {truck1.mileage:.2f} miles")
     print(f"Truck {truck2.id} mileage: {truck2.mileage:.2f} miles")
     print("Truck 3 mileage: 0.00 miles")
+
+def returnToUserInterface():
+    print()
+    inpt = None
+    while inpt is None:
+        inpt = input("Press Enter to return to the main menu. ")
+    print()
+    userInterface()
 
 if __name__ == "__main__":
     main()
