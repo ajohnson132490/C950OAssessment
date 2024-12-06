@@ -99,7 +99,22 @@ def userInterface():
                 print("Invalid input, please try again.")
             
 def allPackagesReport():
-    print("haha")
+    # Report welcome screen
+    print("-----------------------------")
+    print("      All Package Report     ")
+    print("-----------------------------")
+    
+    # Getting the time
+    try:
+        time = datetime.strptime(input("Please enter the time in the following format: H:M AM/PM "), "%I:%M %p")
+    except:
+        print("Invalid input")
+        allPackagesReport()
+    
+    for package_id in range(1,40):
+        package = hash.get(package_id)
+        if (package.loaded_timestamp <= time):
+            print(f"Package {package_id} was loaded at {package.loaded_timestamp} onto truck {package.onTruck}")
         
 def packageReport():
     # Report welcome screen

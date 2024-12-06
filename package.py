@@ -10,6 +10,7 @@ class Package:
         self.notes = notes
         self.status = "At the hub"
         self.loaded_timestamp = None
+        self.onTruck = -1
         self.delivered_timestamp = None
 
     def getId(self):

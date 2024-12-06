@@ -62,6 +62,7 @@ class Truck:
         for package in ordered_list: 
             package.loaded_timestamp = self.current_time
             package.status = "En route"
+            package.onTruck = self.id
             self.load.append(package.getId())
 
     def buildRoute(self, hash, lst):
