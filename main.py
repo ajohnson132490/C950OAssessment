@@ -14,6 +14,7 @@ hash = Hash()
 truck1 = Truck(1)
 truck2 = Truck(2)
 
+# Loads all packages from csv, initiates the trucks running their routes, and initializes the user interface
 def main():
     # Get all the packages in the hash
     with open('Resources/packages.csv') as package_file:
@@ -24,7 +25,7 @@ def main():
             # Create a new package based on the data in the row
             package = Package(int(row[0]), row[1], row[2], row[3], row[4],
                               row[5], row[6], row[7])
-            
+            # Dealing with the incorrect address
             if (package.getId() == 9):
                 package.address = "410 S State St"
                 package.city = "Salt Lake City"
@@ -56,13 +57,15 @@ def main():
     truck1.deliverPackages(hash)
     truck2.deliverPackages(hash)
 
+    # Load and deliver the third route
     truck1.loadPackages(hash, truck1_third_load)
-
+    
     truck1.deliverPackages(hash)
 
     # Run the user interface
     userInterface()
 
+# Creates a menu for the user to select one of three reports
 def userInterface():
     # Welcome screen
     print("-----------------------------")
@@ -98,6 +101,7 @@ def userInterface():
                 option = None
                 print("Invalid input, please try again.")
             
+# Reports the status of all packages that have been loaded or delivered at a certain time
 def allPackagesReport():
     # Report welcome screen
     print("-----------------------------")
@@ -122,6 +126,7 @@ def allPackagesReport():
         elif (package.loaded_timestamp < time):
             print(f"Package {package_id} was loaded at {package.loaded_timestamp} onto truck {package.onTruck}. Status set to \"En Route\".")
         
+# Gives the status of a package at a given time
 def packageReport():
     # Report welcome screen
     print("-----------------------------")
@@ -150,6 +155,7 @@ def packageReport():
     else:
         print("At the hub")
 
+# Gives the mileage report of all trucks
 def mileageReport():
     # Report welcome screen
     print("-----------------------------")
@@ -161,7 +167,9 @@ def mileageReport():
     print(f"Truck {truck2.id} mileage: {truck2.mileage:.2f} miles")
     print("Truck 3 mileage: 0.00 miles")
 
+# Creates a holding space for a user to look at their report data before returning to the main menu
 def returnToUserInterface():
+    # Create some space, then return to main menu when the user presses any key
     print()
     inpt = None
     while inpt is None:

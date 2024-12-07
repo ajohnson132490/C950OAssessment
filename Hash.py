@@ -1,6 +1,3 @@
-# Refrenced from
-# https://www.geeksforgeeks.org/c-program-hashing-chaining/?ref=gcse_outind#
-
 class Hash():
     def __init__(self):
         # Private attributes for buckets and table
