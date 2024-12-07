@@ -2,9 +2,9 @@
 
 # Import all files
 import csv
-from Hash import Hash
-from Package import Package
-from Truck import Truck
+from hash import Hash
+from package import Package
+from truck import Truck
 from datetime import datetime, timedelta
 
 # Create the hashtable
@@ -110,11 +110,17 @@ def allPackagesReport():
     except:
         print("Invalid input")
         allPackagesReport()
-    
+
+    # Reformatting the time to remove the date
+    time = timedelta(hours=time.hour, minutes=time.minute, seconds=time.second)
+
+    #Printing the results
     for package_id in range(1,40):
         package = hash.get(package_id)
-        if (package.loaded_timestamp <= time):
-            print(f"Package {package_id} was loaded at {package.loaded_timestamp} onto truck {package.onTruck}")
+        if (package.delivered_timestamp < time):
+            print(f"Package {package_id} was delivered at {package.delivered_timestamp} onto truck {package.onTruck}. Status set to \"Delivered\".")
+        elif (package.loaded_timestamp < time):
+            print(f"Package {package_id} was loaded at {package.loaded_timestamp} onto truck {package.onTruck}. Status set to \"En Route\".")
         
 def packageReport():
     # Report welcome screen
@@ -160,6 +166,8 @@ def returnToUserInterface():
     inpt = None
     while inpt is None:
         inpt = input("Press Enter to return to the main menu. ")
+    print()
+    print()
     print()
     userInterface()
 
