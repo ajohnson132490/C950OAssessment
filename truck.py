@@ -47,13 +47,7 @@ class Truck:
                         self.distance_data[row_index][j] = float(99.9)
                 row_index += 1
 
-            s = ""
-            for row in range(27):
-                for j in range(27):
-                    s += (str(self.distance_data[row][j]) + ", ")
-                #print(f"Row {row}: {s}")
-                s = ""
-
+            
     def distanceBetween(self, address1, address2):
         return self.distance_data[self.address_list.index(address1)][self.address_list.index(address2)]
 
@@ -110,12 +104,6 @@ class Truck:
                 del nearest_pkg_dist
 
         ordered_list.pop()
-        # This is for printing out the route for testing purposes.
-        str = ""
-        for item in ordered_list:
-            str += f"{item.getId()}"
-            str += " --> "
-        print(str)
 
         return ordered_list
     
