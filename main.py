@@ -119,13 +119,16 @@ def allPackagesReport():
     time = timedelta(hours=time.hour, minutes=time.minute, seconds=time.second)
 
     #Printing the results
-    for package_id in range(1,40):
+    for package_id in range(1,41):
         package = hash.get(package_id)
+        print(f"Package {package.getId()}: Address - {package.address}, Deadline - {package.deadline}, Truck - {package.onTruck}")
         if (package.delivered_timestamp < time):
-            print(f"Package {package_id} was delivered at {package.delivered_timestamp} onto truck {package.onTruck}. Status set to \"Delivered\".")
+            print(f"Package was delivered at {package.delivered_timestamp}. Status set to \"Delivered\".")
         elif (package.loaded_timestamp < time):
-            print(f"Package {package_id} was loaded at {package.loaded_timestamp} onto truck {package.onTruck}. Status set to \"En Route\".")
-        
+            print(f"Package was loaded at {package.loaded_timestamp}. Status set to \"En Route\".")
+        else:
+            print("Package is at the hub. Status set to \"At the hub\"")
+
 # Gives the status of a package at a given time
 def packageReport():
     # Report welcome screen
