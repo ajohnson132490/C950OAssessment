@@ -142,6 +142,17 @@ class Truck:
             package.status = "Delivered"
             package.delivered_timestamp = self.current_time
 
+            # If it's after 10:20am, update package #9's address
+            package9 = hash.get(9)
+            if (self.current_time > timedelta(hours=10, minutes=20, seconds=0) and package9.address != "410 S State St"):
+                # Now that it is after 10:20 am, update package #9's address
+                package9.address = "410 S State St"
+                package9.city = "Salt Lake City"
+                package9.state = "UT"
+                package9.zip = "84111"
+
+            #print(f"Time: {self.current_time} Address: {package9.address}")
+
             # Update the current address
             self.current_address = package.address
         # Clear out the load list

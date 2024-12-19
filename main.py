@@ -52,16 +52,6 @@ def main():
     truck1.deliverPackages(hash)
     truck2.deliverPackages(hash)
 
-    # Delay the third route until the time is after 10:20 am
-    while (truck1.current_time < timedelta(hours=10, minutes=20, seconds=0)):
-        print(truck1.current_time)
-        
-    # Now that it is after 10:20 am, update package #9's address
-    package = hash.get(9)
-    package.address = "410 S State St"
-    package.city = "Salt Lake City"
-    package.state = "UT"
-    package.zip = "84111"
 
     # Load and deliver the third route
     truck1.loadPackages(hash, truck1_third_load)
