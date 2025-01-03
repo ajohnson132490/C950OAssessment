@@ -120,14 +120,14 @@ def allPackagesReport():
             print(f"Package {package.getId()}: Address - 300 State St, Deadline - {package.deadline}, Truck - {package.onTruck}")
         else:
             print(f"Package {package.getId()}: Address - {package.address}, Deadline - {package.deadline}, Truck - {package.onTruck}")
-        if (package.delivered_timestamp < time):
+        if (package.delivered_timestamp <= time):
             print(f"Package was delivered at {package.delivered_timestamp}. Status set to \"Delivered\".")
-        elif (package.loaded_timestamp < time):
+        elif (package.loaded_timestamp <= time):
             print(f"Package was loaded at {package.loaded_timestamp}. Status set to \"En Route\".")
         else:
             if ((package_id == 6 or package_id == 25 or package_id == 28 or package_id == 32)
                  and time < timedelta(hours=9, minutes=5, seconds=0)):
-                print("Delayed on flight---will not arrive to depot until 9:05 am")
+                print("Delayed")
             else:
                 print("Package is at the hub. Status set to \"At the hub\"")
 
@@ -160,7 +160,7 @@ def packageReport():
     else:
         if ((package_id == 6 or package_id == 25 or package_id == 28 or package_id == 32)
             and time < timedelta(hours=9, minutes=5, seconds=0)):
-            print("Delayed on flight---will not arrive to depot until 9:05 am")
+            print("Delayed")
         else:
             print("At the hub")
 
