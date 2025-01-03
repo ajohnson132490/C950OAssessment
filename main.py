@@ -52,7 +52,6 @@ def main():
     truck1.deliverPackages(hash)
     truck2.deliverPackages(hash)
 
-
     # Load and deliver the third route
     truck1.loadPackages(hash, truck1_third_load)
     
@@ -126,7 +125,11 @@ def allPackagesReport():
         elif (package.loaded_timestamp < time):
             print(f"Package was loaded at {package.loaded_timestamp}. Status set to \"En Route\".")
         else:
-            print("Package is at the hub. Status set to \"At the hub\"")
+            if ((package_id == 6 or package_id == 25 or package_id == 28 or package_id == 32)
+                 and time < timedelta(hours=9, minutes=5, seconds=0)):
+                print("Delayed on flight---will not arrive to depot until 9:05 am")
+            else:
+                print("Package is at the hub. Status set to \"At the hub\"")
 
 # Gives the status of a package at a given time
 def packageReport():
@@ -155,7 +158,11 @@ def packageReport():
     elif (package.loaded_timestamp <= time):
         print(f"Loaded at {package.loaded_timestamp}")
     else:
-        print("At the hub")
+        if ((package_id == 6 or package_id == 25 or package_id == 28 or package_id == 32)
+            and time < timedelta(hours=9, minutes=5, seconds=0)):
+            print("Delayed on flight---will not arrive to depot until 9:05 am")
+        else:
+            print("At the hub")
 
 # Gives the mileage report of all trucks
 def mileageReport():
